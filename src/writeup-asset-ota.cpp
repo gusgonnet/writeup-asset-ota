@@ -24,6 +24,8 @@ STARTUP(System.onAssetOta(handleAssets));
 
 void setup()
 {
+  // re-enalbe the asset when testing
+  // System.assetsHandled(false);
 }
 
 void loop()

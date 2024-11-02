@@ -14,26 +14,10 @@
  */
 
 #include "NexUpload.h"
-// #include <SoftwareSerial.h>
-
-// #define USE_SOFTWARE_SERIAL
-//  #ifdef USE_SOFTWARE_SERIAL
-//  SoftwareSerial dbSerial(3, 2); /* RX:D3, TX:D2 */
-//  #define DEBUG_SERIAL_ENABLE
-//  #endif
-
-// #ifdef DEBUG_SERIAL_ENABLE
-// #define dbSerialPrint(a)    dbSerial.print(a)
-// #define dbSerialPrintln(a)  dbSerial.println(a)
-// #define dbSerialBegin(a)    dbSerial.begin(a)
-// #else
-// #define dbSerialPrint(a)    do{}while(0)
-// #define dbSerialPrintln(a)  do{}while(0)
-// #define dbSerialBegin(a)    do{}while(0)
-// #endif
 
 NexUpload::NexUpload(int dummy)
 {
+    _download_baudrate = 115200;
 }
 
 NexUpload::NexUpload(const char *file_name, const uint8_t SD_chip_select, uint32_t download_baudrate)
@@ -50,28 +34,27 @@ NexUpload::NexUpload(const String file_Name, const uint8_t SD_chip_select, uint3
 
 void NexUpload::upload(void)
 {
-    dbSerialBegin(9600);
     if (!_checkFile())
     {
-        dbSerialPrintln("the file is error");
+        Log.info("the file is error");
         return;
     }
     if (_getBaudrate() == 0)
     {
-        dbSerialPrintln("get baudrate error");
+        Log.info("get baudrate error");
         return;
     }
     if (!_setDownloadBaudrate(_download_baudrate))
     {
-        dbSerialPrintln("modify baudrate error");
+        Log.info("modify baudrate error");
         return;
     }
     if (!_downloadTftFile())
     {
-        dbSerialPrintln("download file error");
+        Log.info("download file error");
         return;
     }
-    dbSerialPrintln("download ok\r\n");
+    Log.info("download ok");
 }
 
 uint16_t NexUpload::_getBaudrate(void)
@@ -82,7 +65,7 @@ uint16_t NexUpload::_getBaudrate(void)
         if (_searchBaudrate(baudrate_array[i]))
         {
             _baudrate = baudrate_array[i];
-            dbSerialPrintln("get baudrate");
+            Log.info("get baudrate");
             break;
         }
     }
@@ -177,9 +160,11 @@ bool NexUpload::_setDownloadBaudrate(uint32_t baudrate)
 
     String filesize_str = String(_undownloadByte);
     String baudrate_str = String(baudrate);
+    
     cmd = "whmi-wri " + filesize_str + "," + baudrate_str + ",0";
 
-    dbSerialPrintln(cmd);
+    Log.info(cmd);
+
     this->sendCommand("");
     this->sendCommand(cmd.c_str());
     delay(50);
@@ -246,5 +231,6 @@ bool NexUpload::_downloadTftFile(void)
         }
         --send_timer;
     }
+
     return 1;
 }

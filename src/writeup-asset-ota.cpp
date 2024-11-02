@@ -12,8 +12,8 @@ void handleAssets(spark::Vector<ApplicationAsset> assets)
     if (asset.name() == "nextion.tft")
     {
       Log.info("Nextion TFT file found, writing to Nextion");
-      NexUpload nex_download(1);
-      nex_download.upload();
+      NexUpload nextion(0);
+      nextion.upload();
     }
   }
 

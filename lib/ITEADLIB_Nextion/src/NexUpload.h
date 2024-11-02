@@ -33,7 +33,7 @@ class NexUpload
 {
 public: /* methods */
 
-    NexUpload();
+    NexUpload(int dummy);
     
     /**
      * Constructor. 

@@ -1,0 +1,12 @@
+{
+    "extensions.ignoreRecommendations": true,
+    "C_Cpp.default.configurationProvider": "particle.particle-vscode-core",
+    "files.associations": {
+        "test-manager-run-jenkinsfile": "groovy",
+        "*.ino": "cpp",
+        "__locale": "cpp"
+    },
+    "particle.firmwareVersion": "6.2.0",
+    "particle.targetPlatform": "msom",
+    "particle.targetDevice": ""
+}
